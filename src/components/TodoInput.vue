@@ -4,26 +4,39 @@
     <span class="addContainer" v-on:click="addTodo">
         <i class="addBtn fas fa-plus" aria-hidden="true"></i>
     </span>
+    <modal v-if="showModal" @close="showModal=false">
+      <h3 slot="header">경고</h3>
+      <span slot="footer" @click="showModal=false">
+        할 일을 입력하세요.
+        <i class="cloaseModalBtn fas fa-times" aria-hidden="true"></i>
+      </span>
+    </modal>
   </div>
 </template>
 
 <script>
+  import Modal from "./common/Modal.vue"
   export default {
     data() {
       return {
-        newTodoItem : ""
+        newTodoItem : "",
+        showModal : false
       }
+    },
+    components : {
+      Modal : Modal
     },
     methods : {
       addTodo() {
         if (this.newTodoItem !== "") {
           this.$emit("addTodo", this.newTodoItem); // addTodo 이벤트를 발생시키면서 value 값을 TodoInput child teg에 전달한다.
           this.clearInput();
-          // 등록 및 삭제시 바로 반영되지 않음.
           // console.log(this.newTodoItem);
           // localStorage.setItem(this.newTodoItem, this.newTodoItem);
           // this.clearInput();
 
+        } else {
+          this.showModal = !this.showModal;
         }
       },
       clearInput() {
